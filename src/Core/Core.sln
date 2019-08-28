@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Types.Sorting.Tests", "Type
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Types.Sorting.Mongo.Tests", "Types.Sorting.Mongo.Tests\Types.Sorting.Mongo.Tests.csproj", "{E8843255-77EB-471F-B682-528BB4B5D1D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Types.NodaTime", "Types.NodaTime\Types.NodaTime.csproj", "{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -449,6 +451,18 @@ Global
 		{E8843255-77EB-471F-B682-528BB4B5D1D5}.Release|x64.Build.0 = Release|Any CPU
 		{E8843255-77EB-471F-B682-528BB4B5D1D5}.Release|x86.ActiveCfg = Release|Any CPU
 		{E8843255-77EB-471F-B682-528BB4B5D1D5}.Release|x86.Build.0 = Release|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Debug|x64.Build.0 = Debug|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Debug|x86.Build.0 = Debug|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Release|x64.ActiveCfg = Release|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Release|x64.Build.0 = Release|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Release|x86.ActiveCfg = Release|Any CPU
+		{7EC3F15B-ABD7-47FA-B805-4E8243055BCB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
