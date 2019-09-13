@@ -440,6 +440,9 @@ In some cases, you need to provide options to alter GraphQL's execution behavior
   <data name="StringType_Description" xml:space="preserve">
     <value>The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.</value>
   </data>
+  <data name="UploadType_Description" xml:space="preserve">
+    <value>The `Upload` scalar type represents a file upload.</value>
+  </data>
   <data name="String_Argument_NullOrEmpty" xml:space="preserve">
     <value>The `{0}` cannot be null or empty.</value>
   </data>

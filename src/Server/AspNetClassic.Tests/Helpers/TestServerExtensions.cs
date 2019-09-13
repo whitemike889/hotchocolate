@@ -35,10 +35,18 @@ namespace HotChocolate.AspNetClassic
             this TestServer testServer, string requestBody,
             string contentType, string path)
         {
-            return testServer.HttpClient
-                .PostAsync(CreateUrl(path),
+            return SendPostRequestAsync(
+                    testServer,
                     new StringContent(requestBody,
-                        Encoding.UTF8, contentType));
+                        Encoding.UTF8, contentType),
+                    path);
+        }
+
+        public static Task<HttpResponseMessage> SendPostRequestAsync(
+            this TestServer testServer, HttpContent content, string path)
+        {
+            return testServer.HttpClient
+                .PostAsync(CreateUrl(path), content);
         }
 
         public static Task<HttpResponseMessage> SendGetRequestAsync(
