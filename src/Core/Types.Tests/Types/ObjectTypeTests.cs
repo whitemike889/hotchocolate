@@ -1795,7 +1795,7 @@ namespace HotChocolate.Types
                             result = s + "_level2";
                         }
 
-                        context.Result = context.Result + "_" + result;
+                        context.Result = result + "_" + context.Result;
                     });
 
                 descriptor.Field(t => t.ValueWithDirective)
@@ -1849,7 +1849,7 @@ namespace HotChocolate.Types
                         result = s + "_directive";
                     }
 
-                    context.Result = context.Result + "_" + result;
+                    context.Result = result + "_" + context.Result;
                 });
             }
         }
