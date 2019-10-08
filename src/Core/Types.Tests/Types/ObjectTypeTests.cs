@@ -1578,6 +1578,24 @@ namespace HotChocolate.Types
             schema.ToString().MatchSnapshot();
         }
 
+        [Fact]
+        public async Task Ensure_That_Middleware_Is_Correctly_Executed()
+        {
+            // arrange
+            ISchema schema = SchemaBuilder.New()
+                .AddQueryType<QueryRootType>()
+                .Create();
+
+            IQueryExecutor executor = schema.MakeExecutable();
+
+            // act
+            IExecutionResult result = await executor.ExecuteAsync(
+                "{ level1 { level2 { value } } }");
+
+            // assert
+            result.MatchSnapshot();
+        }
+
         public class GenericFoo<T>
         {
             public T Value { get; }
@@ -1719,6 +1737,81 @@ namespace HotChocolate.Types
             public bool? Bar { get; set; }
 
             public List<bool?> Bars { get; set; }
+        }
+
+        public class QueryRootType
+            : ObjectType<QueryRoot>
+        {
+            protected override void Configure(IObjectTypeDescriptor<QueryRoot> descriptor)
+            {
+                descriptor.Field(t => t.Level1)
+                    .Use(next => async context =>
+                    {
+                        context.ScopedContextData =
+                            context.ScopedContextData.SetItem("foo", "root");
+                        await next(context);
+                    })
+                    .Type<Level1Type>();
+            }
+        }
+
+        public class Level1Type
+            : ObjectType<Level1>
+        {
+            protected override void Configure(IObjectTypeDescriptor<Level1> descriptor)
+            {
+                descriptor.Field(t => t.Level2)
+                    .Use(next => async context =>
+                    {
+                        if (context.ScopedContextData.TryGetValue("foo", out object o)
+                            && o is string s)
+                        {
+                            context.ScopedContextData =
+                                context.ScopedContextData.SetItem("foo", s + "_level1");
+                        }
+
+                        await next(context);
+                    })
+                    .Type<Level2Type>();
+            }
+        }
+
+        public class Level2Type
+            : ObjectType<Level2>
+        {
+            protected override void Configure(IObjectTypeDescriptor<Level2> descriptor)
+            {
+                descriptor.Field(t => t.Value)
+                    .Use(next => async context =>
+                    {
+                        await next(context);
+
+                        string result = null;
+
+                        if (context.ScopedContextData.TryGetValue("foo", out object o)
+                            && o is string s)
+                        {
+                            result = s + "_level2";
+                        }
+
+                        context.Result = context.Result + "_" + result;
+                    });
+            }
+        }
+
+        public class QueryRoot
+        {
+            public Level1 Level1 { get; set; } = new Level1();
+        }
+
+        public class Level1
+        {
+            public Level2 Level2 { get; set; } = new Level2();
+        }
+
+        public class Level2
+        {
+            public string Value { get; set; } = "ResolverResult";
         }
     }
 }
