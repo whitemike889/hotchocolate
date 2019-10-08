@@ -1584,13 +1584,14 @@ namespace HotChocolate.Types
             // arrange
             ISchema schema = SchemaBuilder.New()
                 .AddQueryType<QueryRootType>()
+                .AddDirectiveType<SomeDirectiveType>()
                 .Create();
 
             IQueryExecutor executor = schema.MakeExecutable();
 
             // act
             IExecutionResult result = await executor.ExecuteAsync(
-                "{ level1 { level2 { value } } }");
+                "{ level1 { level2 { value valueWithDirective } } }");
 
             // assert
             result.MatchSnapshot();
@@ -1796,6 +1797,20 @@ namespace HotChocolate.Types
 
                         context.Result = context.Result + "_" + result;
                     });
+
+                descriptor.Field(t => t.ValueWithDirective)
+                    .Use(next => async context =>
+                    {
+                        await next(context);
+
+                        if (context.ScopedContextData.TryGetValue("foo", out object o)
+                            && o is string s)
+                        {
+                            context.ScopedContextData =
+                                context.ScopedContextData.SetItem("foo", s + "_level2");
+                        }
+                    })
+                    .Directive("some");
             }
         }
 
@@ -1812,6 +1827,31 @@ namespace HotChocolate.Types
         public class Level2
         {
             public string Value { get; set; } = "ResolverResult";
+            public string ValueWithDirective { get; set; } = "ResolverResult";
+        }
+
+        public class SomeDirectiveType
+            : DirectiveType
+        {
+            protected override void Configure(IDirectiveTypeDescriptor descriptor)
+            {
+                descriptor.Name("some");
+                descriptor.Location(DirectiveLocation.FieldDefinition);
+                descriptor.Use(next => async context =>
+                {
+                    await next(context);
+
+                    string result = null;
+
+                    if (context.ScopedContextData.TryGetValue("foo", out object o)
+                        && o is string s)
+                    {
+                        result = s + "_directive";
+                    }
+
+                    context.Result = context.Result + "_" + result;
+                });
+            }
         }
     }
 }
